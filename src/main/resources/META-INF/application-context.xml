@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.2.xsd">
+
+	<!-- Database -->
+	<bean id="datasource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	    <property name="driverClassName" value="org.postgresql.Driver" />
+	    <property name="url" value="jdbc:postgresql://localhost/test" />
+	    <property name="username" value="test" />
+	    <property name="password" value="test" />
+	</bean>
+	
+	<!-- Entity Manager -->
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="datasource" />
+		<property name="persistenceUnitName" value="persistence-properties" />
+	</bean>
+
+	<!-- Repository -->
+	<bean id="dataObjectRootRepositoryImpl" class="fei.persistence.core.repository.DataObjectRootRepositoryImpl">
+		<constructor-arg value="fei.persistence.core.model.User"></constructor-arg>
+		<constructor-arg value="javax.persistence.EntityManager"></constructor-arg>
+	</bean>
+
+	<!-- Transaction Manager -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	
+	<!-- Jpa Repositories -->
+	<jpa:repositories base-package="fei.persistence.core.repository" />
+	
+			<!--  factory-class="fei.persistence.core.repository.MyRepositoryFactoryBean"-->
+</beans>
