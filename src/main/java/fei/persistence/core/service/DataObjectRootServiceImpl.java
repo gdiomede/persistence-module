@@ -6,9 +6,11 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import fei.persistence.core.jpa.ObjectID;
 import fei.persistence.core.model.DataObjectRoot;
 import fei.persistence.core.repository.DataObjectRootRepository;
 
@@ -18,11 +20,11 @@ import fei.persistence.core.repository.DataObjectRootRepository;
  * @author Petri Kainulainen
  */
 @Service
-public class RepositoryDataObjectRootService implements DataObjectRootService {
+public class DataObjectRootServiceImpl implements DataObjectRootService {
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(RepositoryDataObjectRootService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DataObjectRootServiceImpl.class);
     
-    @Resource
+    @Autowired
     private DataObjectRootRepository dataObjectRootRepository;
 
     @Transactional
@@ -37,7 +39,7 @@ public class RepositoryDataObjectRootService implements DataObjectRootService {
 
     @Transactional(rollbackFor = DataObjectRootNotFoundException.class)
     @Override
-    public DataObjectRoot delete(Long id) throws DataObjectRootNotFoundException {
+    public DataObjectRoot delete(ObjectID id) throws DataObjectRootNotFoundException {
         LOGGER.debug("Deleting DataObjectRoot with id: " + id);
         
         DataObjectRoot deleted = (DataObjectRoot) dataObjectRootRepository.findOne(id);
@@ -55,12 +57,12 @@ public class RepositoryDataObjectRootService implements DataObjectRootService {
     @Override
     public List<DataObjectRoot> findAll() {
         LOGGER.debug("Finding all DataObjectRoots");
-        return dataObjectRootRepository.findAll();
+        return (List<DataObjectRoot>) dataObjectRootRepository.findAll();
     }
 
     @Transactional(readOnly = true)
     @Override
-    public DataObjectRoot findById(Long id) {
+    public DataObjectRoot findById(ObjectID id) {
         LOGGER.debug("Finding DataObjectRoot by id: " + id);
         return (DataObjectRoot) dataObjectRootRepository.findOne(id);
     }
@@ -89,4 +91,9 @@ public class RepositoryDataObjectRootService implements DataObjectRootService {
     protected void setDataObjectRootRepository(DataObjectRootRepository dataObjectRootRepository) {
         this.dataObjectRootRepository = dataObjectRootRepository;
     }
+
+	@Override
+	public DataObjectRoot save(DataObjectRoot toSave) {
+		 return this.dataObjectRootRepository.save(toSave);
+	}
 }

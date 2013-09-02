@@ -3,7 +3,6 @@ package fei.persistence.core.model;
 
 
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,6 +15,12 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
+
+import fei.persistence.core.jpa.ObjectID;
+
 /**
  * The root entity class. Each subclass will specify the entitity related information.
  * @author Giuseppe Diomede
@@ -27,9 +32,17 @@ import javax.persistence.Version;
 @Table(name = "DataObjectRoot")
 public class DataObjectRoot {
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+	@Id @GeneratedValue(generator="hibseq", strategy=GenerationType.TABLE)
+	@GenericGenerator(name="hibseq", strategy = "fei.persistence.core.jpa.ObjectIDGenerator",
+	    parameters = {
+	        @Parameter(name="table", value = "ClassId"),
+	        @Parameter(name="primary_key_column", value = "ClassName"),
+	        @Parameter(name="primary_key_id_column", value = "ClassId"),
+	        @Parameter(name="value_column", value = "NextIdToUse")
+	    }
+	) 
+	
+	private ObjectID id;
 
     @Version
     @Column(name = "Version", nullable = false)
@@ -51,14 +64,14 @@ public class DataObjectRoot {
     /**
 	 * @return the id
 	 */
-	public Long getId() {
+	public ObjectID getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(Long id) {
+	public void setId(ObjectID id) {
 		this.id = id;
 	}
 

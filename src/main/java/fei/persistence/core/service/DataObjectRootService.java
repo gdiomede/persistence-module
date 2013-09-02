@@ -2,6 +2,7 @@ package fei.persistence.core.service;
 
 import java.util.List;
 
+import fei.persistence.core.jpa.ObjectID;
 import fei.persistence.core.model.DataObjectRoot;
 
 /**
@@ -24,7 +25,7 @@ public interface DataObjectRootService {
      * @return The deleted DataObjectRoot.
      * @throws DataObjectRootNotFoundException  if no DataObjectRoot is found with the given id.
      */
-    public DataObjectRoot delete(Long id) throws DataObjectRootNotFoundException;
+    public DataObjectRoot delete(ObjectID id) throws DataObjectRootNotFoundException;
 
     /**
      * Finds all DataObjectRoots.
@@ -37,7 +38,7 @@ public interface DataObjectRootService {
      * @param id	The id of the wanted DataObjectRoot.
      * @return The found DataObjectRoot. If no DataObjectRoot is found, this method returns null.
      */
-    public DataObjectRoot findById(Long id);
+    public DataObjectRoot findById(ObjectID id);
 
     /**
      * Updates the information of a DataObjectRoot.
@@ -46,4 +47,14 @@ public interface DataObjectRootService {
      * @throws DataObjectRootNotFoundException if no DataObjectRoot is found with given id.
      */
     public DataObjectRoot update(DataObjectRoot updated) throws DataObjectRootNotFoundException;
+
+    
+    /**
+     * Saves the information of a DataObjectRoot.
+     * @param toSave	The information of the DataObjectRoot that has to be saved.
+     * @return The saved DataObjectRoot.
+     */
+
+    public DataObjectRoot save(DataObjectRoot toSave);
+    
 }

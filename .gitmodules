@@ -1,0 +1,3 @@
+[submodule "POPO"]
+	path = POPO
+	url = https://github.com/gdiomede/persistence-module.git
